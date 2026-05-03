@@ -4,6 +4,29 @@ A **vector embedding** turns a piece of data (a word, sentence, or image) into a
 
 **Vector Embedding(another defn)** = turning each token ID into a high-dimensional vector of numbers where semantic similarity becomes geometric closeness (so "dog" and "puppy" end up near each other in meaning-space).
 
+---
+
+## Why "High-Dimensional" and Not "Multi-Dimensional"?
+
+Both are technically correct, but **"high-dimensional"** is the precise, intentional term in ML.
+
+| Term | What it implies |
+| ---- | --------------- |
+| **Multi-dimensional** | Just means "more than 1" — could be 2D, 3D, 10D. Too vague. |
+| **High-dimensional** | Specifically means **hundreds to thousands** of dimensions (e.g. OpenAI's `text-embedding-3-small` = **1536D**, `text-embedding-3-large` = **3072D**). |
+
+### Why so many dimensions?
+
+Each dimension can encode a different "feature" of meaning — gender, plurality, formality, topic, sentiment, tense, etc. To capture the full richness of human language, you need a *lot* of axes:
+
+- **2D / 3D** → can only separate a handful of concepts (great for visualization, useless for real meaning).
+- **768D / 1536D / 3072D** → enough room for `dog` and `puppy` to be close, while still distinct from `wolf`, `pet`, `animal`, etc.
+
+> [!NOTE]
+> There's a famous concept called the **"curse of dimensionality"** — saying *high*-dimensional (not just *multi*-dimensional) signals you know it's intentionally large.
+
+---
+
 > **The magic rule:** similar meanings → close points. Different meanings → far points.
 
 ---
@@ -12,10 +35,10 @@ A **vector embedding** turns a piece of data (a word, sentence, or image) into a
 
 ```mermaid
 flowchart LR
-    A1["📝 Dog"] --> M["🧠 Encoder Model"]
-    A2["📝 Puppy"] --> M
-    A3["📝 Cat"] --> M
-    A4["📝 Car"] --> M
+    A1["Dog"] --> M["Encoder Model"]
+    A2["Puppy"] --> M
+    A3["Cat"] --> M
+    A4["Car"] --> M
     M --> V1("0.9, 0.8, 0.1")
     M --> V2("0.8, 0.9, 0.2")
     M --> V3("0.7, 0.7, 0.3")
