@@ -14,6 +14,32 @@ The "shot" count has nothing to do with where instructions live (system vs user)
 
 ---
 
+## System prompt
+
+A **system prompt** is a high-priority instruction given to the model *before* the conversation starts. It defines **who the model is, what it should do, and what it must not do** — its persona, scope, rules, and output style — and it stays in effect for every user turn that follows.
+
+| Role | Who writes it | Purpose |
+|------|---------------|---------|
+| `system` | The developer | Sets behaviour, rules, and guardrails |
+| `user` | The end user | Asks the actual question |
+| `assistant` | The model | Replies according to the system prompt |
+
+```python
+{"role": "system", "content": "You are a helpful assistant. You only answer Python questions."}
+```
+
+**Think of it as:** the job description the model reads before the user walks in.
+
+A good system prompt usually covers:
+- **Identity** — "You are a Python tutor."
+- **Scope** — "Only answer Python questions."
+- **Behaviour** — "Be concise. Use code blocks for snippets."
+- **Refusals** — "Politely decline anything off-topic."
+
+The system prompt is independent of zero-shot / few-shot — it's *where* you set the rules, not *how many examples* you give.
+
+---
+
 ## Zero-shot prompting
 
 Describe the task in natural language. No examples. The model relies on its training to figure out how to do it.
