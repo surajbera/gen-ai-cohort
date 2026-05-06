@@ -170,3 +170,7 @@ credentials.json
 # Logs
 logs/
 *.log
+
+# Local-only folder containing shared FastRouter credentials — never commit
+phase-2-fast-router/
+
