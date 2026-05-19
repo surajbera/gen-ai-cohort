@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <title>Todo App</title>
+  <style>
+    :root { --bg: #f5f5f5; --card: #fff; --text: #333; --muted: #777; --accent: #3b82f6; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; background: var(--bg); color: var(--text); }
+    .todo-app { max-width: 520px; margin: 40px auto; padding: 20px; background: var(--card); border-radius: 8px; box-shadow: 0 4px 14px rgba(0,0,0,.08); }
+    h1 { font-size: 1.25rem; margin: 0 0 12px; }
+    form { display: flex; gap: 8px; }
+    input[type='text'] { flex: 1; padding: 12px; font-size: 1rem; border: 1px solid #ddd; border-radius: 6px; }
+    button { padding: 12px 14px; border: none; border-radius: 6px; background: var(--accent); color: white; cursor: pointer; }
+    button:hover { opacity: .95; }
+    .filters { display: flex; gap: 8px; margin-top: 12px; }
+    .filters button { padding: 8px 12px; border: 1px solid #ddd; background: #fff; border-radius: 6px; cursor: pointer; }
+    .filters button.active { background: #e6f0ff; border-color: #cfe0ff; }
+    ul { list-style: none; padding: 0; margin: 16px 0 0; }
+    li.todo { display: flex; align-items: center; gap: 8px; padding: 10px; border-bottom: 1px solid #eee; }
+    li.todo:last-child { border-bottom: none; }
+    .todo-text { flex: 1; }
+    .todo-completed { text-decoration: line-through; color: #888; }
+    .delete { background: transparent; color: #e33; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class='todo-app' id='app'>
+    <h1>Todo</h1>
+    <form id='todo-form' autocomplete='off'>
+      <input type='text' id='new-todo' placeholder='What needs to be done?' aria-label='New todo' />
+    </form>
+    <div class='filters' id='filters' role='navigation' aria-label='Filter todos'>
+      <button data-filter='all' class='active'>All</button>
+      <button data-filter='active'>Active</button>
+      <button data-filter='completed'>Completed</button>
+    </div>
+    <ul id='todo-list' aria-live='polite'></ul>
+  </div>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = 'todoAppTodos';
+      let todos = [];
+      let filter = 'all';
+
+      const form = document.getElementById('todo-form');
+      const input = document.getElementById('new-todo');
+      const list = document.getElementById('todo-list');
+      const filters = document.getElementById('filters');
+
+      function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+      }
+
+      function load() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          try {
+            todos = JSON.parse(raw);
+          } catch (e) {
+            todos = [];
+          }
+        }
+      }
+
+      function render() {
+        [...filters.querySelectorAll('button')].forEach(b => {
+          b.classList.toggle('active', b.dataset.filter === filter);
+        });
+
+        const visible = todos.filter(t => {
+          if (filter === 'all') return true;
+          if (filter === 'active') return !t.completed;
+          if (filter === 'completed') return !!t.completed;
+        });
+
+        list.innerHTML = '';
+        if (visible.length === 0) {
+          const li = document.createElement('li');
+          li.textContent = 'No todos';
+          li.style.padding = '12px';
+          list.appendChild(li);
+          return;
+        }
+
+        visible.forEach(t => {
+          const li = document.createElement('li');
+          li.className = 'todo';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = !!t.completed;
+          checkbox.title = 'Toggle complete';
+          checkbox.addEventListener('change', () => {
+            t.completed = checkbox.checked;
+            save();
+            render();
+          });
+
+          const span = document.createElement('span');
+          span.className = 'todo-text';
+          span.textContent = t.text;
+          if (t.completed) span.classList.add('todo-completed');
+
+          const del = document.createElement('button');
+          del.className = 'delete';
+          del.textContent = 'Delete';
+          del.addEventListener('click', () => {
+            todos = todos.filter(x => x.id !== t.id);
+            save();
+            render();
+          });
+
+          li.appendChild(checkbox);
+          li.appendChild(span);
+          li.appendChild(del);
+          list.appendChild(li);
+        });
+      }
+
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && input.value.trim()) {
+          const text = input.value.trim();
+          const newTodo = { id: Date.now(), text, completed: false };
+          todos.push(newTodo);
+          input.value = '';
+          save();
+          render();
+        }
+      });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        if (input.value.trim()) {
+          const text = input.value.trim();
+          const newTodo = { id: Date.now(), text, completed: false };
+          todos.push(newTodo);
+          input.value = '';
+          save();
+          render();
+        }
+      });
+
+      filters.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const f = btn.dataset.filter;
+        if (f) {
+          filter = f;
+          render();
+        }
+      });
+
+      // Init
+      load();
+      render();
+    })();
+  </script>
+</body>
+</html>

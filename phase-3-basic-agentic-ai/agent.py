@@ -14,6 +14,15 @@ MAX_ITERATIONS = 25
 MAX_CONSECUTIVE_PLANS = 2
 
 
+def _preview(value, limit: int = 120) -> str:
+    """Short, single-line preview of any value for logging."""
+    text = json.dumps(value) if not isinstance(value, str) else value
+    text = text.replace("\n", " ")
+    if len(text) > limit:
+        text = text[:limit] + f"... ({len(text)} chars total)"
+    return text
+
+
 def run_agent(query: str) -> None:
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -58,12 +67,20 @@ def run_agent(query: str) -> None:
         if step == "action":
             tool_name = parsed.get("function")
             tool_input = parsed.get("input")
-            print(f"Calling Tool => {tool_name} with Input => {tool_input}")
+            preview = _preview(tool_input)
+            print(f"Calling Tool => {tool_name} with Input => {preview}")
 
-            if tool_name in available_tools:
-                output = available_tools[tool_name](tool_input)
-            else:
+            if tool_name not in available_tools:
                 output = f"Error: tool '{tool_name}' is not available."
+            else:
+                tool_fn = available_tools[tool_name]
+                try:
+                    if isinstance(tool_input, dict):
+                        output = tool_fn(**tool_input)
+                    else:
+                        output = tool_fn(tool_input)
+                except TypeError as exc:
+                    output = f"Error calling {tool_name}: {exc}"
 
             messages.append({
                 "role": "user",
