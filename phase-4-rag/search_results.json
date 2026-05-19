@@ -1,0 +1,82 @@
+[
+  {
+    "page_content": "Chapter 45\nPerformance Basics\nPerformance is a feature. Slow pages lose users, lower search rankings, and drain mobile\nbatteries. A handful of techniques get you most of the way.\nMeasure first\nUse Lighthouse and the WebPageTest service to measure real page performance. The metrics\nthat matter most for users are Largest Contentful Paint, Interaction to Next Paint, and Cumulative\nLayout Shift, collectively known as Core Web Vitals.\nShip less code\nThe single biggest win for most sites is shipping less JavaScript. Audit your bundle with a tool\nlike source-map-explorer. Remove unused dependencies. Prefer the platform (dialog, popover,\ndetails) over JavaScript replacements.\nImages\nImages are usually the largest assets on a page. Serve modern formats (AVIF, WebP), include\nsrcset for responsive sizing, lazy-load below the fold, and always specify width and height to\nprevent layout shift.\nCaching\nSet far-future cache headers on assets with hashed filenames. The first visit is slow; every",
+    "metadata": {
+      "producer": "ReportLab PDF Library - (opensource)",
+      "creator": "(unspecified)",
+      "creationdate": "2026-05-18T23:38:30+05:00",
+      "author": "Suraj B.",
+      "keywords": "",
+      "moddate": "2026-05-18T23:38:30+05:00",
+      "subject": "(unspecified)",
+      "title": "The Pocket Guide to Web Development",
+      "trapped": "/False",
+      "source": "/Users/suraj.be/Desktop/personal/gen-ai-cohort/phase-4-rag/web_development_basics.pdf",
+      "total_pages": 71,
+      "page": 61,
+      "page_label": "62",
+      "_id": "30a6e7b3-7705-4188-9757-7203f44f2c66",
+      "_collection_name": "learning_vectors"
+    }
+  },
+  {
+    "page_content": "rendering.\nPerformance\nRecord a profile while reproducing a slow interaction. The resulting flame chart shows exactly\nwhich functions, layouts, and paints took how long. Most performance problems become obvious\nafter one good profile.\nApplication\nInspect localStorage, sessionStorage, cookies, IndexedDB, cache storage, and service workers.\nClear them all when debugging weird stale-data behavior. The Service Workers section is\nessential for any offline-capable app.",
+    "metadata": {
+      "producer": "ReportLab PDF Library - (opensource)",
+      "creator": "(unspecified)",
+      "creationdate": "2026-05-18T23:38:30+05:00",
+      "author": "Suraj B.",
+      "keywords": "",
+      "moddate": "2026-05-18T23:38:30+05:00",
+      "subject": "(unspecified)",
+      "title": "The Pocket Guide to Web Development",
+      "trapped": "/False",
+      "source": "/Users/suraj.be/Desktop/personal/gen-ai-cohort/phase-4-rag/web_development_basics.pdf",
+      "total_pages": 71,
+      "page": 64,
+      "page_label": "65",
+      "_id": "dd9d604b-3c70-421c-9c8e-6c698aa9bd91",
+      "_collection_name": "learning_vectors"
+    }
+  },
+  {
+    "page_content": "prevent layout shift.\nCaching\nSet far-future cache headers on assets with hashed filenames. The first visit is slow; every\nsubsequent visit and every navigation within the site reuses cached assets. A good CDN turns\nglobal latency into local latency.\nAvoid layout thrashing\nReading layout properties (offsetTop, getBoundingClientRect) after writing to the DOM forces the\nbrowser to recalculate layout synchronously. Batch reads and writes, or use\nrequestAnimationFrame for animation work.",
+    "metadata": {
+      "producer": "ReportLab PDF Library - (opensource)",
+      "creator": "(unspecified)",
+      "creationdate": "2026-05-18T23:38:30+05:00",
+      "author": "Suraj B.",
+      "keywords": "",
+      "moddate": "2026-05-18T23:38:30+05:00",
+      "subject": "(unspecified)",
+      "title": "The Pocket Guide to Web Development",
+      "trapped": "/False",
+      "source": "/Users/suraj.be/Desktop/personal/gen-ai-cohort/phase-4-rag/web_development_basics.pdf",
+      "total_pages": 71,
+      "page": 61,
+      "page_label": "62",
+      "_id": "0d6aa358-13a8-468b-adc2-73b4def77442",
+      "_collection_name": "learning_vectors"
+    }
+  },
+  {
+    "page_content": "62\nPerformance Basics\n .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 62\nMeasure first\n .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 62\nShip less code\n .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 62\nImages\n .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 62\nCaching\n .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 62\nAvoid layout thrashing\n63\nHow the Browser Renders a Page\n .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  . 63\nParsing",
+    "metadata": {
+      "producer": "ReportLab PDF Library - (opensource)",
+      "creator": "(unspecified)",
+      "creationdate": "2026-05-18T23:38:30+05:00",
+      "author": "Suraj B.",
+      "keywords": "",
+      "moddate": "2026-05-18T23:38:30+05:00",
+      "subject": "(unspecified)",
+      "title": "The Pocket Guide to Web Development",
+      "trapped": "/False",
+      "source": "/Users/suraj.be/Desktop/personal/gen-ai-cohort/phase-4-rag/web_development_basics.pdf",
+      "total_pages": 71,
+      "page": 10,
+      "page_label": "11",
+      "_id": "e55e0111-1a22-494b-b328-b65ce8b40c70",
+      "_collection_name": "learning_vectors"
+    }
+  }
+]
