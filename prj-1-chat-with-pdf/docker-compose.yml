@@ -1,0 +1,46 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      QDRANT_URL: http://qdrant:6333
+      MODEL_CHAT: ${MODEL_CHAT:-gpt-5-nano}
+      MODEL_EMBED: ${MODEL_EMBED:-text-embedding-3-small}
+      CHUNK_SIZE: ${CHUNK_SIZE:-1500}
+      CHUNK_OVERLAP: ${CHUNK_OVERLAP:-300}
+      RETRIEVAL_K: ${RETRIEVAL_K:-8}
+      HISTORY_WINDOW: ${HISTORY_WINDOW:-6}
+    volumes:
+      # Bind-mount source for uvicorn --reload (hot reload on file save)
+      - ./backend/app:/app/app
+      # Bind-mount data dir so SQLite + uploaded PDFs are visible on the host
+      # (open backend/data/app.db in any SQLite browser to inspect).
+      - ./backend/data:/app/data
+    depends_on:
+      - qdrant
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_PROXY: http://backend:8000
+    volumes:
+      # Bind-mount source for Vite HMR
+      - ./frontend:/app
+      # Anonymous volume so the container's node_modules isn't shadowed
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  qdrant_data:
